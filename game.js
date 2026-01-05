@@ -1,74 +1,78 @@
-// Set up the canvas
+// ===== CANVAS SETUP =====
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-// Set canvas size
 canvas.width = 800;
 canvas.height = 600;
 
-// Load images
-let spidermanImage = new Image();
-let backgroundImage = new Image();
+// ===== LOAD IMAGES =====
+const spidermanImage = new Image();
+const backgroundImage = new Image();
 
-spidermanImage.src = 'spiderman.png';  // Make sure the Spider-Man image is in the same folder
-backgroundImage.src = 'background.jpg'; // Same for the background image
+let loadedImages = 0;
 
-// Spider-Man position and properties
-let spiderman = {
-    x: 100,
-    y: 500,
-    width: 50,
-    height: 50,
-    speed: 5,
+spidermanImage.onload = imageLoaded;
+backgroundImage.onload = imageLoaded;
+
+spidermanImage.src = "spiderman.png";
+backgroundImage.src = "background.jpg";
+
+function imageLoaded() {
+  loadedImages++;
+  if (loadedImages === 2) {
+    requestAnimationFrame(gameLoop);
+  }
+}
+
+// ===== PLAYER =====
+const spiderman = {
+  x: 100,
+  y: 420,
+  width: 80,
+  height: 80,
+  speed: 6
 };
 
-// Handle movement (left and right)
-let leftPressed = false;
-let rightPressed = false;
+// ===== CONTROLS =====
+let left = false;
+let right = false;
 
-// Add event listeners to capture key presses
 document.addEventListener("keydown", (e) => {
-    if (e.key === "ArrowLeft") leftPressed = true;
-    if (e.key === "ArrowRight") rightPressed = true;
+  if (e.key === "ArrowLeft") left = true;
+  if (e.key === "ArrowRight") right = true;
 });
 
 document.addEventListener("keyup", (e) => {
-    if (e.key === "ArrowLeft") leftPressed = false;
-    if (e.key === "ArrowRight") rightPressed = false;
+  if (e.key === "ArrowLeft") left = false;
+  if (e.key === "ArrowRight") right = false;
 });
 
-// Function to draw the background
-function drawBackground() {
-    ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
+// ===== GAME LOOP =====
+function gameLoop() {
+  // Clear screen
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Draw background
+  ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
+
+  // Move Spider-Man
+  if (left) spiderman.x -= spiderman.speed;
+  if (right) spiderman.x += spiderman.speed;
+
+  // Keep inside screen
+  if (spiderman.x < 0) spiderman.x = 0;
+  if (spiderman.x + spiderman.width > canvas.width) {
+    spiderman.x = canvas.width - spiderman.width;
+  }
+
+  // Draw Spider-Man
+  ctx.drawImage(
+    spidermanImage,
+    spiderman.x,
+    spiderman.y,
+    spiderman.width,
+    spiderman.height
+  );
+
+  requestAnimationFrame(gameLoop);
 }
-
-// Function to draw Spider-Man
-function drawSpiderman() {
-    ctx.drawImage(spidermanImage, spiderman.x, spiderman.y, spiderman.width, spiderman.height);
-}
-
-// Game update function
-function updateGame() {
-    // Clear canvas
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Draw the background
-    drawBackground();
-
-    // Move Spider-Man based on key presses
-    if (leftPressed && spiderman.x > 0) {
-        spiderman.x -= spiderman.speed;
-    }
-    if (rightPressed && spiderman.x < canvas.width - spiderman.width) {
-        spiderman.x += spiderman.speed;
-    }
-
-    // Draw Spider-Man
-    drawSpiderman();
-
-    // Repeat the update function
-    requestAnimationFrame(updateGame);
-}
-
-// Start the game
-updateGame();
