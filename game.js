@@ -31,7 +31,7 @@ const player = {
   // sprite sheet frame
   frameX: 0,
   frameY: 0,
-  frameWidth: 64,
+  frameWidth: 48,
   frameHeight: 64
 };
 
