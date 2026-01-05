@@ -4,37 +4,37 @@ const ctx = canvas.getContext("2d");
 canvas.width = 800;
 canvas.height = 600;
 
-// ===== LOAD IMAGES =====
-const background = new Image();
 const spiderman = new Image();
-
-let loaded = 0;
-background.onload = checkLoaded;
-spiderman.onload = checkLoaded;
-
-background.src = "background.jpg";
 spiderman.src = "spiderman.png";
 
-function checkLoaded() {
-  loaded++;
-  if (loaded === 2) requestAnimationFrame(gameLoop);
-}
+spiderman.onload = () => {
+  // Clear
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-// ===== PLAYER =====
-const player = {
-  x: 100,
-  y: 420,
-  width: 64,
-  height: 64,
-  speed: 5,
+  // DEBUG background
+  ctx.fillStyle = "#000";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // sprite sheet frame
-  frameX: 0,
-  frameY: 0,
-  frameWidth: 64,
-  frameHeight: 80
+  // 🔴 DRAW ONE FIXED FRAME FROM YOUR SPRITE SHEET
+  // These numbers are MANUAL and SAFE
+  ctx.drawImage(
+    spiderman,
+    0,    // sx
+    0,    // sy
+    80,   // sw
+    80,   // sh
+    200,  // dx
+    300,  // dy
+    80,   // dw
+    80    // dh
+  );
+
+  console.log("Spider-Man drawn");
 };
 
+spiderman.onerror = () => {
+  alert("Spider-Man image failed to load");
+};
 // ===== CONTROLS =====
 let left = false;
 let right = false;
