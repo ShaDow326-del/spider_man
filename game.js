@@ -4,36 +4,29 @@ const ctx = canvas.getContext("2d");
 canvas.width = 800;
 canvas.height = 450;
 
-const spiderman = new Image();
-spiderman.src = "spiderman.png";
+const img = new Image();
+img.src = "spiderman.png";
 
-spiderman.onload = () => {
-  draw();
-};
+// 🔧 CHANGE THESE NUMBERS
+let sx = 200;   // move RIGHT
+let sy = 100;   // move DOWN
+const sw = 80;
+const sh = 80;
+
+const scale = 4;
+
+img.onload = () => draw();
 
 function draw() {
-  // Black background (temporary)
   ctx.fillStyle = "black";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // 🔴 Crop ONE good frame from sprite sheet
-  const sx = 0;   // source x
-  const sy = 0;   // source y
-  const sw = 80;  // source width
-  const sh = 80;  // source height
-
-  // 🔵 Draw BIG on screen
-  const scale = 4;
-
-  const dw = sw * scale;
-  const dh = sh * scale;
-
-  const dx = canvas.width / 2 - dw / 2;
-  const dy = canvas.height / 2 - dh / 2;
-
   ctx.drawImage(
-    spiderman,
+    img,
     sx, sy, sw, sh,
-    dx, dy, dw, dh
+    canvas.width / 2 - (sw * scale) / 2,
+    canvas.height / 2 - (sh * scale) / 2,
+    sw * scale,
+    sh * scale
   );
 }
