@@ -4,29 +4,24 @@ const ctx = canvas.getContext("2d");
 canvas.width = 800;
 canvas.height = 450;
 
-const img = new Image();
-img.src = "spiderman.png";
+const spiderman = new Image();
+spiderman.src = "spiderman_single.png";
 
-// 🔧 CHANGE THESE NUMBERS
-let sx = 200;   // move RIGHT
-let sy = 100;   // move DOWN
-const sw = 80;
-const sh = 80;
-
-const scale = 4;
-
-img.onload = () => draw();
+spiderman.onload = () => {
+  draw();
+};
 
 function draw() {
+  // background (temporary)
   ctx.fillStyle = "black";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+  // draw your Spider-Man
   ctx.drawImage(
-    img,
-    sx, sy, sw, sh,
-    canvas.width / 2 - (sw * scale) / 2,
-    canvas.height / 2 - (sh * scale) / 2,
-    sw * scale,
-    sh * scale
+    spiderman,
+    canvas.width / 2 - 150,
+    canvas.height / 2 - 200,
+    300,
+    400
   );
 }
