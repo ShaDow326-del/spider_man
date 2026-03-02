@@ -15,13 +15,21 @@ const bgImg = new Image();
 heroImg.src = "spiderman_single.png";
 bgImg.src = "background.png";
 
+// ===== GAME BALANCE CONSTANTS =====
+const WEB_BASE_DAMAGE = 10;
+const WEB_DAMAGE_LEVEL_SCALING = 2;
+const ENEMY_COLLISION_DAMAGE = 8;
+const ENEMY_SPAWN_BASE_DELAY = 1200;   // ms
+const ENEMY_SPAWN_RANDOM_DELAY = 600;  // ms added randomly
+const FLOATER_BASE_FONT_SIZE = 14;     // px, grows with combo
+
 // ===== GAME STATE =====
 const STATE = { START: "start", PLAYING: "playing", PAUSED: "paused", GAMEOVER: "gameover" };
 let gameState = STATE.START;
 let score = 0;
 let combo = 1;
 let comboTimer = 0;
-let comboTimeout = 180; // frames before combo resets
+let comboTimeout = 180; // frames (~3 s at 60 FPS) before combo resets
 let websShot = 0;
 let bestCombo = 1;
 let animFrame = null;
@@ -43,7 +51,7 @@ const player = {
   facingRight: true,
   health: 100,
   maxHealth: 100,
-  invincible: 0,        // frames of invincibility
+  invincible: 0,        // remaining frames of invincibility (countdown)
   flashTimer: 0
 };
 
@@ -326,7 +334,7 @@ function update() {
       const e = enemies[j];
       if (!e.alive) continue;
       if (w.x > e.x && w.x < e.x + e.width && w.y > e.y && w.y < e.y + e.height) {
-        const dmg = 10 + level * 2;
+        const dmg = WEB_BASE_DAMAGE + level * WEB_DAMAGE_LEVEL_SCALING;
         e.health -= dmg;
         e.hitFlash = 12;
         webs.splice(i, 1);
@@ -345,8 +353,8 @@ function update() {
           screenShakeIntensity = 6;
           enemies.splice(j, 1);
           level++;
-          setTimeout(spawnEnemy, 1200);
-          setTimeout(spawnEnemy, 1200 + Math.random() * 600);
+          setTimeout(spawnEnemy, ENEMY_SPAWN_BASE_DELAY);
+          setTimeout(spawnEnemy, ENEMY_SPAWN_BASE_DELAY + Math.random() * ENEMY_SPAWN_RANDOM_DELAY);
         }
         break;
       }
@@ -371,7 +379,7 @@ function update() {
         player.x + player.width > e.x &&
         player.y < e.y + e.height &&
         player.y + player.height > e.y) {
-      player.health -= 8;
+      player.health -= ENEMY_COLLISION_DAMAGE;
       player.invincible = 60;
       combo = 1;
       comboTimer = 0;
@@ -601,7 +609,7 @@ function drawFloaters() {
     const alpha = Math.min(1, f.life / 25);
     ctx.globalAlpha = alpha;
     ctx.fillStyle = f.color;
-    ctx.font = `bold ${Math.round(14 + combo)}px Orbitron, sans-serif`;
+    ctx.font = `bold ${Math.round(FLOATER_BASE_FONT_SIZE + combo)}px Orbitron, sans-serif`;
     ctx.textAlign = "center";
     ctx.shadowColor = f.color;
     ctx.shadowBlur = 10;
