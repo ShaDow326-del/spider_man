@@ -2,10 +2,90 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Spider Game</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Spider-Man: Web Slinger</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- Start Screen Overlay -->
+  <div id="startScreen" class="overlay">
+    <div class="overlay-content glass-panel">
+      <div class="spider-logo">🕷️</div>
+      <h1 class="game-title">SPIDER-MAN</h1>
+      <p class="game-subtitle">Web Slinger</p>
+      <div class="controls-info">
+        <h3>Controls</h3>
+        <div class="controls-grid">
+          <span class="key">← →</span><span>Move</span>
+          <span class="key">↑ / Space</span><span>Jump</span>
+          <span class="key">F</span><span>Shoot Web</span>
+          <span class="key">P</span><span>Pause</span>
+        </div>
+      </div>
+      <button id="startBtn" class="btn btn-primary pulse-anim">START GAME</button>
+      <p class="touch-hint">📱 Touch left/right to move, tap center to jump, tap right edge to shoot web</p>
+    </div>
+  </div>
+
+  <!-- Pause Screen Overlay -->
+  <div id="pauseScreen" class="overlay hidden">
+    <div class="overlay-content glass-panel">
+      <h2 class="overlay-title">PAUSED</h2>
+      <button id="resumeBtn" class="btn btn-primary">RESUME</button>
+    </div>
+  </div>
+
+  <!-- Game Over Screen Overlay -->
+  <div id="gameOverScreen" class="overlay hidden">
+    <div class="overlay-content glass-panel">
+      <div id="gameOverIcon" class="result-icon">💀</div>
+      <h2 id="gameOverTitle" class="overlay-title">GAME OVER</h2>
+      <p id="gameOverMessage" class="overlay-message"></p>
+      <div class="stats-display">
+        <div class="stat-item">
+          <span class="stat-label">Score</span>
+          <span id="finalScore" class="stat-value neon-text">0</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Best Combo</span>
+          <span id="finalCombo" class="stat-value neon-text">0x</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Webs Shot</span>
+          <span id="finalWebs" class="stat-value neon-text">0</span>
+        </div>
+      </div>
+      <button id="restartBtn" class="btn btn-primary pulse-anim">PLAY AGAIN</button>
+    </div>
+  </div>
+
+  <!-- HUD Overlay -->
+  <div id="hud" class="hidden">
+    <div id="scoreDisplay" class="hud-item glass-panel-sm">
+      <span class="hud-label">SCORE</span>
+      <span id="scoreValue" class="hud-value neon-text">0</span>
+    </div>
+    <div id="comboDisplay" class="hud-item glass-panel-sm hidden">
+      <span class="hud-label">COMBO</span>
+      <span id="comboValue" class="hud-value neon-text-gold">1x</span>
+    </div>
+    <div id="levelDisplay" class="hud-item glass-panel-sm">
+      <span class="hud-label">LEVEL</span>
+      <span id="levelValue" class="hud-value neon-text">1</span>
+    </div>
+  </div>
+
+  <!-- Mobile Touch Controls -->
+  <div id="mobileControls" class="hidden">
+    <button id="btnLeft" class="mobile-btn touch-btn" aria-label="Move Left">◀</button>
+    <button id="btnJump" class="mobile-btn touch-btn" aria-label="Jump">▲</button>
+    <button id="btnWeb" class="mobile-btn touch-btn web-btn" aria-label="Shoot Web">🕸</button>
+    <button id="btnRight" class="mobile-btn touch-btn" aria-label="Move Right">▶</button>
+  </div>
+
   <canvas id="gameCanvas"></canvas>
   <script src="game.js"></script>
 </body>
